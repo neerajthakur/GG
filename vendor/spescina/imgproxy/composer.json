@@ -1,0 +1,29 @@
+{
+        "name": "spescina/imgproxy",
+        "description": "An image proxy for Laravel",
+        "keywords": ["laravel", "image", "proxy", "resizer", "crop"],
+        "authors": [
+                {
+                        "name": "Simone Pescina",
+                        "email": "s.pescina@gmail.com"
+                }
+        ],
+        "license": "MIT",
+        "support": {
+                "issues": "https://github.com/spescina/imgproxy/issues"
+        },
+        "require": {
+                "php": ">=5.3.0",
+                "illuminate/support": "4.x"
+        },
+        "require-dev": {
+                "mockery/mockery": "0.9.*",
+                "satooshi/php-coveralls": "dev-master"
+        },
+        "autoload": {
+                "psr-0": {
+                        "Spescina\\Imgproxy": "src/"
+                }
+        },
+        "minimum-stability": "stable"
+}
