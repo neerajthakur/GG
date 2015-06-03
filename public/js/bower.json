@@ -1,0 +1,19 @@
+{
+  "name": "draymaster",
+  "version": "1.0.0",
+  "appPath": ".",
+  "dependencies": {
+    "angular": "~1.2.8",
+    "angular-resource": "~1.2.8",
+    "angular-sanitize": "~1.2.8",
+    "angular-route": "~1.2.8",
+    "bootstrap": "~3.0.3",
+    "jquery": "~1.9.1",
+    "angular-bootstrap" : "~0.10.0"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ]
+}

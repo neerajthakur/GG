@@ -1,0 +1,191 @@
+.rate-quote-grp > td {
+  padding:10px;
+}
+
+.rate-quote-grp > td > h4 {
+  font-size:16px;
+}
+
+.rate-quote-grp > td > .btn-lg {
+  font-size:20px;
+  line-height:19px;
+}
+
+.btn-sub-text {
+  font-size:11px;
+}
+
+/*Override default Datepicker CSS to remove unwanted grey arrow*/
+.datepicker-dropdown:before {
+  display:none !important;
+}
+
+.ajax-loader-small {
+  background-image: url('../img/loaders/ajax-loader-small.gif');
+  background-repeat: no-repeat;
+  background-position: 90% 50%;
+}
+
+#resultsTable tr.selected td, #ratesTable tr.selected td, #missingRatesTable tr.selected td {
+  background-color:#fdf3e4;
+}
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none;
+}
+
+.map {
+  border:2px solid #333;
+  width: 99%;
+  height: 400px;
+}
+
+.map-large {
+  border:2px solid #333;
+  width:99%;
+  height:770px;
+}
+
+.served td, .served td:hover {
+  background-color: #d0e9c6 !important;
+}
+
+.tariff-wizard-header {
+  border-bottom: 1px solid black;
+}
+
+.tariff-group-select {
+  float:left;
+  margin-left:-110px;
+  border:none;
+}
+
+.tariff-group-select span, .tariff-group-select i {
+  vertical-align: middle;
+  color:#e5412d;
+}
+
+#wiggle-alert {
+  display:table-cell;
+  vertical-align:middle;
+}
+
+/*Overrides bug where iCheck helper was taking up entire table area*/
+.iCheck-helper {
+  position:relative !important;
+}
+
+.modal {
+	display:block;
+}
+
+.no-bullets {
+  list-style-type: none;
+}
+
+.extra-padding li{
+  padding-top:7px;
+}
+.extra-padding li span {
+  margin-right:7px;
+}
+
+.clickable-rate:hover, .clickable-missing-rate:hover {
+  cursor: pointer;
+}
+
+#infoWindow {
+  font-size:16px;
+  text-align:left;
+	overflow: hidden;
+	width: auto;
+}
+
+#priceInput {
+  width:50px;
+  text-align:left;
+  margin-left:2px;
+  padding-left:2px;
+  display:inline-block;
+}
+
+.info-window-btn {
+  margin-left:19%;
+  margin-top:7px;
+}
+
+#controls-box-one {
+  font-size:.75em;
+  border:1px solid #999;
+  margin-bottom:15px;
+  width:170px;
+  background:white;
+  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  padding:2px;
+  box-shadow: 2px 2px 5px #888888;
+  padding-bottom:10px;
+	z-index:4;
+}
+
+#controls-box {
+	position:absolute;
+	right:45px;
+	top:145px;
+	z-index:3;
+}
+
+#controls-box-one table {
+  margin-left:9px;
+  margin-top:10px;
+  padding-bottom:10px;
+}
+
+#controls-box-one table input {
+  margin-top:-2px;
+}
+
+#controls-box-two ul li input {
+  margin-top:-2px;
+}
+
+#controls-box-two {
+  font-size:.75em;
+  border:1px solid #999;
+  margin-bottom:15px;
+  width:170px;
+  background:white;
+  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  padding:2px;
+  
+  box-shadow: 2px 2px 5px #888888;
+	z-index:4;
+}
+#controls-box-two ul {
+  list-style-type:none;
+  margin-left:11px;
+  margin-top:4px;
+  padding-left:0px !important;
+}
+
+.greenText {
+  color: green;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.datepicker table tr td.active {
+  background-color: #e5412d !important;
+}
+
+.nav-tabs>li {
+  background: #F3F2F2;
+}
+
+@media print {
+  header, nav, footer, #sidebar-wrapper, #content-header, a, .btn, #loading, #search, #sidebar {
+    display:none !important;
+  }
+  margin: 25mm 25mm 25mm 25mm;
+}

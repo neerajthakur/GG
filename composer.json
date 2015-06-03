@@ -5,8 +5,10 @@
 	"license": "MIT",
 	"type": "project",
 	"require": {
+		
 		"laravel/framework": "4.2.*",
-		"spescina/imgproxy": "2.x"
+		"spescina/imgproxy": "2.x",
+		"dragonfire1119/asset": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

@@ -88,3 +88,20 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+Route::filter('assets', function()
+{
+	//CSS Assets required for all pages
+	Asset::add('font-awesome', './css/font-awesome.min.css');
+	Asset::add('bootstrap-css', './css/bootstrap.min.css');
+	Asset::add('jquery-ui-css', './js/libs/css/ui-lightness/jquery-ui-1.9.2.custom.min.css');
+	Asset::add('app-css', './css/draymaster.min.css');
+	
+	//JS Assets required for all pages
+  
+	Asset::add('vendor', './js/build/vendor.js');
+	Asset::add('app-js', './js/build/draymaster.min.js');
+});
+
+//apply the assets filter to ALL routes
+Route::when('*', 'assets');
