@@ -5,13 +5,13 @@ class LoginController extends BaseController {
 		
 		if (Auth::check()){
 			if(Session::get('account_role') == 'client'){
-				return Redirect::to('/home');
+				return Redirect::to('/dashboard');
 			}elseif(Session::get('account_role') == 'merchandise'){
-				return Redirect::to('/home');
+				return Redirect::to('/dashboard');
 			}elseif(Session::get('account_role') == 'admin'){
-				return Redirect::to('/admin/home');
+				return Redirect::to('/admin/dashboard');
 			}elseif(Session::get('account_role') == 'supervisor'){
-				return Redirect::to('/admin/home');
+				return Redirect::to('/admin/dashboard');
 			}
 		
 		}else{
@@ -46,7 +46,7 @@ class LoginController extends BaseController {
 			$usertype = Usertype::find(Auth::user()->usertype_id); 
 			if($usertype->usertype == "client" || $usertype->usertype == "merchandise"){
 				Session::put('account_role',$usertype->usertype);
-				return Redirect::to('/home');
+				return Redirect::to('/dashboard');
 			}else{
 				Auth::logout();
 				return Redirect::to('/')->withInput()->with('login_error', 'Your are not authorized.');
@@ -70,7 +70,7 @@ class LoginController extends BaseController {
 	//Admin login page
 	public function adminLogin(){
 		if (Auth::check()){
-			return Redirect::to("/admin/home");
+			return Redirect::to("/admin/dashboard");
 		}else{
 		  return View::make('login.dmeadmin.login');
 		}
@@ -101,9 +101,9 @@ class LoginController extends BaseController {
 		$rememberMe = Input::get('remember-me') ? true : false;
 		if(Auth::attempt($user, $rememberMe)){
 			$usertype = Usertype::find(Auth::user()->usertype_id); 
-			if($usertype->usertype == "admin" || $usertype->usertype == "supervisor"){
+			if($usertype->usertype == "admin"){
 				Session::put('account_role',$usertype->usertype);
-				return Redirect::to('/admin/home');
+				return Redirect::to('/admin/dashboard');
 			}else{
 				Auth::logout();
 				return Redirect::to('/admin')->withInput()->with('login_error', 'Your are not authorized.');

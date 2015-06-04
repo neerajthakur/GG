@@ -22,7 +22,7 @@
 				return Redirect::to('/password/reset')->withErrors($validation)->withInput();
 			}
 			$credentials = array('email' => Input::get('email'));
-			$query = DB::table('user')->select('id')->where('email',Input::get('email'))->first();
+			$query = DB::table('users')->select('id')->where('email',Input::get('email'))->first();
 			if($query){
 
 				$response = Password::remind($credentials, function($message) {

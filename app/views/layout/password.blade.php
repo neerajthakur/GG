@@ -1,24 +1,33 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<title>Hydra</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1"/>
-		{{ Asset::styles() }}
-    <link media="all" type="text/css" rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,800italic,400,600,800">
-		<link media="all" rel="stylesheet" href="/js/plugins/icheck/skins/minimal/blue.css" type="text/css" />
-		<link media="all" rel="stylesheet" href="/css/min/Login.min.css" type="text/css" />
-	</head>
-	<body>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="icon" href="images/favicon.png"/>
+    <title>Green Globe</title>
+    
+	{{ HTML::style('css/bootstrap.css') }}
+   
+	{{ HTML::style('css/style.css') }} 
 
-<div id="login-container">
+	<script>function loaded (el) { el.classList.add('loaded') }</script>
+      <!-- HTML5 Shiv and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body onload="loaded(document.body)" >
+<div id="wrapper">
+		<div id="login-container">
+		<div id="login">
 
 	<div id="logo">
-			<img src="/img/logos/logo-login.png" alt="Logo" />
-	</div>
+				<img alt="Logo" src="/images/logo.png">
+			</div>
 
-	<div id="login">
+	
 	
 		
 		<?php if(Session::has('result_success')): ?>
@@ -45,20 +54,15 @@
 		
 
 
-		
-
-	</div> <!-- /#login -->
-
-	<!--<a href="/account" id="signup-btn" class="btn btn-lg btn-block">
-		Create an Account
-	</a>-->
+	 
 
 
-</div> <!-- /#login-container -->
-
-{{ Asset::scripts() }}
-<script src="./js/plugins/icheck/jquery.icheck.min.js"></script>
-<script src="./js/scripts/bootstrap-template/Login.js"></script>
+		</div>
+        </div>
+   
+    
+	{{ HTML::script('js/jquery-1.11.1.js') }}
+	{{ HTML::script('js/jquery-1.11.1.js') }}
 
 </body>
 </html>

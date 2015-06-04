@@ -16,12 +16,23 @@ Route::get('/', 'LoginController@index');
 Route::post('/', array('before'=>'csrf', 'uses'=>'LoginController@post'));
 Route::get('/logout', 'LoginController@logout');
 
-Route::get('password/reset', 'PasswordController@remind');
-Route::post('password/reset', array( 'uses' => 'PasswordController@request','as' => 'password.request'));
+Route::get('/password/reset', 'PasswordController@remind');
+Route::post('/password/reset', array( 'uses' => 'PasswordController@request','as' => 'password.request'));
 
-Route::get('password/reset/{token}', array('uses' => 'PasswordController@reset','as' => 'password.reset'));
-Route::post('password/reset/{token}', array('uses' => 'PasswordController@update','as' => 'password.update'));
+
+
+Route::get('/password/reset/{token}', array('uses' => 'PasswordController@reset','as' => 'password.reset'));
+Route::post('/password/reset/{token}', array('uses' => 'PasswordController@update','as' => 'password.update'));
+
+
 
 //Login Controllers for Admin
 Route::get('/admin', 'LoginController@adminLogin');
 Route::post('/admin', array('before'=>'csrf', 'uses'=>'LoginController@adminLoginPost'));
+
+
+
+//Admin Urls
+Route::group(array('before'=>'auth_admin'), function(){
+	Route::get('/admin/dashboard', 'DashboardController@adminDashboard');
+});
