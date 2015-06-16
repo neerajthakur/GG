@@ -98,9 +98,9 @@ class Property extends Eloquent {
 
 	public static function propertyDetail($hash = null, $type = 'hash'){
 		if($type == 'hash'){
-			$record = DB::table("properties")->select('properties.*','members.hash as member_hash')->leftJoin("members","members.id","=","properties.member_id")->where('properties.hash', $hash)->first();
+			$record = DB::table("properties")->select('properties.*','members.hash as member_hash', 'members.id as member_id')->leftJoin("members","members.id","=","properties.member_id")->where('properties.hash', $hash)->first();
 		}else{
-			$record = DB::table("properties")->select('properties.*','members.hash as member_hash')->leftJoin("members","members.id","=","properties.member_id")->where('properties.id', $hash)->first();
+			$record = DB::table("properties")->select('properties.*','members.hash as member_hash', 'members.id as member_id')->leftJoin("members","members.id","=","properties.member_id")->where('properties.id', $hash)->first();
 		}
 		return $record;
 	}

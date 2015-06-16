@@ -9,7 +9,7 @@ active
               <div class="toptabingpanel">
 			  <ul>
 					<li>
-						<div class="previoustab">Add Company Info</div>
+						<a href = "/admin/members/add/{{$member_id}}"><div class="previoustab">Add Company Info</div><a/>
 					</li>
 					<li>
 						<small></small>
@@ -24,18 +24,7 @@ active
 						<div class="next-tab">Add User</div>
 					</li>
 				</ul>
-				<?php $messages = $errors->all('<p>:message</p>') ?>
-			<?php 
 				
-				if(count($messages) > 0){
-					echo "<div class = 'error-message-box'>";
-						foreach($messages as $msg){
-							echo $msg;
-						}
-					echo "</div>";	
-				}
-				
-			?>
 			<?php if(Session::has('account_success')): ?>
 			<div class="alert alert-success">
 					<p>{{ Session::get('account_success') }}</p>
@@ -45,6 +34,29 @@ active
 			
 			<div class="adduserform-main upload-logo-panel company-panel">
 				<div class="uploadphoto-panel">
+				<?php
+					if($action_type == 'edit'){
+				?>
+					<form class="form-horizontal" id="upload" enctype = "multipart/form-data" method="post" action="{{ url('upload/image/edit', $record->hash) }}" autocomplete="off">
+						<span style = "position:relative;background: #d8d8d8">
+						<label id = "output" style = "left: 14px;position: absolute;top: 14px;">
+						<?php 
+							if($record->property_image != ""){
+								$image_path = ImgProxy::link($record->property_image, 0, 81);
+							}else{
+								$image_path = ImgProxy::link("/images/upload-logo.png", 0, 81);
+							}
+						?>
+
+						<img src = "{{ $image_path }}" /></label><input type="file" name="image" id="file_browse" />						</span>
+						<small>Upload Property Picture</small>
+						<input type="hidden" name="_token" value="{{ csrf_token() }}" />
+						<input type="hidden" name="image_type" value="property" />
+						
+					</form>
+				<?php
+					}else{
+				?>
 					<form class="form-horizontal" id="upload" enctype="multipart/form-data" method="post" action="{{ url('upload/image') }}" autocomplete="off">
 						<span style = "position:relative;background: #d8d8d8"><label id = "output" style = "left: 14px;position: absolute;top: 14px;"><img src = "{{ Session::get('userUploadedPropertyImageThumb', '/images/upload-logo.png'); }}" /></label><input type="file" name="image" id="file_browse" /> </span>
 						<small>Upload Property Picture</small>
@@ -52,11 +64,22 @@ active
 						<input type="hidden" name="image_type" value="property" />
 						
 					</form>
+				<?php } ?>
 				</div>
-				{{ Form::open(array('id'=>'login-form','class'=>'form','files'=>true)) }}
+				<?php
+					if($action_type == 'edit'){
+				?>
+					{{ Form::model($record, array('action' => array('UserController@addPropertyInfoPost', $record->hash), 'method' => 'post') ) }}
+					{{ Form::hidden('property_hash', $record->hash) }}
+					{{ Form::hidden('property_id', $record->id) }}
+					{{ Form::hidden('company_hash', $record->member_hash) }}
+				<?php }else{ ?>
+						{{ Form::open(array('id'=>'login-form','class'=>'form','files'=>true)) }}
+				<?php } ?>
 				<div class="titlefield">
 					<span>Property Name</span>
 					{{ Form::text('property_name', Input::old('property_name'), array('class'=>'', 'placeholder' => 'Property name here')) }}
+					<label class = "error_message hide">{{ $errors->first('property_name') }}</label>
 					{{ Form::hidden('form_type', "property") }}
 					{{ Form::hidden('member_id', $member_id) }}
 
@@ -67,6 +90,7 @@ active
 					<div class="formfield">
 						<span>Address*</span>
 						{{ Form::text('property_address', Input::old('property_address'), array('class'=>'')) }}
+						<label class = "error_message hide">{{ $errors->first('property_address') }}</label>
 					</div>
 					<div class="formfield">
 						<span>Suite#</span>
@@ -74,29 +98,36 @@ active
 					</div>
 					<div class="formfieldDevide">
 								<div class="formfield">
-									<span>City</span>
+									<span>City*</span>
 									{{ Form::text('property_city', Input::old('property_city'), array('class'=>'')) }}
+									<label class = "error_message hide">{{ $errors->first('property_city') }}</label>
 								</div>
 								<div class="formfield">
-									<span>State</span>
+									<span>State*</span>
 									{{ Form::text('property_state', Input::old('property_state'), array('class'=>'')) }}
+									<label class = "error_message hide">{{ $errors->first('property_state') }}</label>
 								</div>
 							</div>
 							<div class="formfieldDevide">
 								<div class="formfield">
-									<span>Country</span>
+									<span>Country*</span>
+									<div class = "select_div">
 									{{ Form::select('property_country_id', $countries, null, array('class'=>'business-Type')) }}
+									</div>
+									<label class = "error_message hide">{{ $errors->first('property_country_id') }}</label>
 									
 								</div>
 								<div class="formfield">
-									<span>Zip-Code</span>
+									<span>Zip-Code*</span>
 									{{ Form::text('property_zipcode', Input::old('property_zipcode'), array('class'=>'')) }}
+									<label class = "error_message hide">{{ $errors->first('property_zipcode') }}</label>
 								</div>
 							</div>
 							<div class="formfieldDevide">
 								<div class="formfield">
-									<span>Phone</span>
+									<span>Phone*</span>
 									{{ Form::text('property_phone', Input::old('property_phone'), array('class'=>'')) }}
+									<label class = "error_message hide">{{ $errors->first('property_phone') }}</label>
 								</div>
 								<div class="formfield">
 									<span>Fax</span>
@@ -106,6 +137,7 @@ active
 							<div class="formfield">
 								<span>Email</span>
 								{{ Form::text('property_email', Input::old('property_email'), array('class'=>'')) }}
+								<label class = "error_message hide">{{ $errors->first('property_email') }}</label>
 							</div>
 							<div class="formfield">
 								<span>Website</span>
@@ -128,8 +160,11 @@ active
 									{{ Form::text('property_membership_code', Input::old('property_membership_code'), array('class'=>'')) }}
 								</div>
 								<div class="formfield">
-									<span>Certification Standard</span>
+									<span>Certification Standard*</span>
+									<div class = "select_div">
 									{{ Form::select('property_certification_standard_id', $certificationStandards, null, array('class'=>'business-Type')) }}
+									</div>
+									<label class = "error_message hide">{{ $errors->first('property_certification_standard_id') }}</label>
 								</div>
 								<div class="formfield authorized">
 									{{ Form::checkbox('property_preauthorize_audit', '1', (Input::old('property_preauthorize_audit') == '1') ? false : true) }}<label>Pre-Authorize First Audit</label>
@@ -137,15 +172,21 @@ active
 							</div>
 							<div class="formfieldDevide">
 								<div class="formfield">
-									<span>Property Type</span>
+									<span>Property Type*</span>
+									<div class = "select_div">
 									{{ Form::select('property_type_id', $propertyTypes, null, array('class'=>'business-Type')) }}
+									</div>
+									<label class = "error_message hide">{{ $errors->first('property_type_id') }}</label>
 								</div>
 								
 							</div>
 							<div class="formfieldDevide">
 								<div class="formfield">
 									<span>Property Size</span>
+									<div class = "select_div">
 									{{ Form::select('property_size_id', $propertySizes, null, array('class'=>'business-Type')) }}
+									</div>
+									<label class = "error_message hide">{{ $errors->first('property_size_id') }}</label>
 								</div>
 							</div>
 						</div>
@@ -169,42 +210,7 @@ active
 
 @endsection
 @section('script')
-	<script type="text/javascript">
-<!--
-$(document).ready(function() {
-	    var options = { 
-                beforeSubmit:  showRequest,
-        success:       showResponse,
-        dataType: 'json' 
-        }; 
-     $('body').delegate('#file_browse','change', function(){
-         $('#upload').ajaxForm(options).submit();          
-     }); 
-});        
-function showRequest(formData, jqForm, options) { 
-    $("#validation-errors").hide().empty();
-    $("#output").css('display','none');
-    return true; 
-} 
-function showResponse(response, statusText, xhr, $form)  { 
-    if(response.success == false)
-    {
-        var arr = response.errors;
-        $.each(arr, function(index, value)
-        {
-            if (value.length != 0)
-            {
-                $("#validation-errors").append('<div class="alert alert-error"><strong>'+ value +'</strong><div>');
-            }
-        });
-        $("#validation-errors").show();
-    } else {
-         $("#output").html("<img src='"+response.file+"' />");
-         $("#output").css('display','block');
-    }
-}
-//-->
-</script>
+	<script type="text/javascript"></script>
 <script>
   $(function() {
     $('#toggle-one').bootstrapToggle();

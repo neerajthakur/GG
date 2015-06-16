@@ -24,18 +24,7 @@ active
 						<div class="next-tab">Add User</div>
 					</li>
 				</ul>
-				<?php $messages = $errors->all('<p>:message</p>') ?>
-			<?php 
 				
-				if(count($messages) > 0){
-					echo "<div class = 'error-message-box'>";
-						foreach($messages as $msg){
-							echo $msg;
-						}
-					echo "</div>";	
-				}
-				
-			?>
 			<?php if(Session::has('account_success')): ?>
 			<div class="alert alert-success">
 					<p>{{ Session::get('account_success') }}</p>
@@ -45,6 +34,27 @@ active
 			
 			<div class="adduserform-main upload-logo-panel company-panel">
 				<div class="uploadphoto-panel">
+				<?php
+					if($action_type == 'edit'){
+				?>
+					<form class="form-horizontal" id="upload" enctype = "multipart/form-data" method="post" action="{{ url('upload/image/edit', $record->hash) }}" autocomplete="off">
+						<span style = "position:relative;background: #d8d8d8"><label id = "output" style = "left: 14px;position: absolute;top: 14px;">
+						<?php 
+							if($record->company_logo != ""){
+								$image_path = ImgProxy::link($record->company_logo, 0, 81);
+							}else{
+								$image_path = ImgProxy::link("/images/upload-logo.png", 0, 81);
+							}
+						?>
+
+						<img src = "{{ $image_path }}" /></label><input type="file" name="image" id="file_browse" /> </span>
+						<small>Upload Property Picture</small>
+						<input type="hidden" name="_token" value="{{ csrf_token() }}" />
+						<input type="hidden" name="image_type" value="company" />
+						
+					</form>
+					
+				<?php }else{ ?>
 					<form class="form-horizontal" id="upload" enctype = "multipart/form-data" method="post" action="{{ url('upload/image') }}" autocomplete="off">
 						<span style = "position:relative;background: #d8d8d8"><label id = "output" style = "left: 14px;position: absolute;top: 14px;"><img src = "{{ Session::get('userUploadedCompanyImageThumb', '/images/upload-logo.png'); }}" /></label><input type="file" name="image" id="file_browse" /> </span>
 						<small>Upload Profile Picture</small>
@@ -52,12 +62,24 @@ active
 						<input type="hidden" name="image_type" value="company" />
 						
 					</form>
+				<?php } ?>
 				</div>
-				{{ Form::open(array('id'=>'login-form','class'=>'form','files'=>true)) }}
+				<?php
+					if($action_type == 'edit'){
+				?>
+					{{ Form::model($record, array('action' => array('UserController@addCompanyInfoPost', $record->hash), 'method' => 'post') ) }}
+					{{ Form::hidden('company_hash', $record->hash) }}
+					{{ Form::hidden('company_id', $record->id) }}
+				<?php }else{ ?>
+					{{ Form::open(array('id'=>'login-form','class'=>'form','files'=>true)) }}
+				<?php } ?>
+				
 				<div class="titlefield">
 					<span>Company Name*</span>
 					{{ Form::text('company_name', Input::old('company_name'), array('class'=>'', 'placeholder' => '')) }}
+					<label class = "error_message hide">{{ $errors->first('company_name') }}</label>
 					{{ Form::hidden('form_type', "member") }}
+
 				</div>
 				<div class="properOuter">
 					<div class="business-type">
@@ -65,10 +87,12 @@ active
 					<div class="formfield">
 						<span>Company Code*</span>
 						{{ Form::text('company_code', Input::old('company_code'), array('class'=>'')) }}
+						<label class = "error_message hide">{{ $errors->first('company_code') }}</label>
 					</div>
 					<div class="formfield">
 						<span>Address*</span>
 						{{ Form::text('company_address', Input::old('company_address'), array('class'=>'')) }}
+						<label class = "error_message hide">{{ $errors->first('company_address') }}</label>
 					</div>
 					<div class="formfield">
 						<span>Suite#</span>
@@ -78,27 +102,34 @@ active
 								<div class="formfield">
 									<span>City*</span>
 									{{ Form::text('company_city', Input::old('company_city'), array('class'=>'')) }}
+									<label class = "error_message hide">{{ $errors->first('company_city') }}</label>
 								</div>
 								<div class="formfield">
 									<span>State*</span>
 									{{ Form::text('company_state', Input::old('company_state'), array('class'=>'')) }}
+									<label class = "error_message hide">{{ $errors->first('company_state') }}</label>
 								</div>
 							</div>
 							<div class="formfieldDevide">
 								<div class="formfield">
 									<span>Country*</span>
+									<div class = "select_div">
 									{{ Form::select('company_country_id', $countries, null, array('class'=>'business-Type')) }}
+									</div>
+									<label class = "error_message hide">{{ $errors->first('company_country_id') }}</label>
 									
 								</div>
 								<div class="formfield">
 									<span>Zip-Code*</span>
 									{{ Form::text('company_zipcode', Input::old('company_zipcode'), array('class'=>'')) }}
+									<label class = "error_message hide">{{ $errors->first('company_zipcode') }}</label>
 								</div>
 							</div>
 							<div class="formfieldDevide">
 								<div class="formfield">
 									<span>Phone*</span>
 									{{ Form::text('company_phone', Input::old('company_phone'), array('class'=>'')) }}
+									<label class = "error_message hide">{{ $errors->first('company_phone') }}</label>
 								</div>
 								<div class="formfield">
 									<span>Fax</span>
@@ -108,6 +139,7 @@ active
 							<div class="formfield">
 								<span>Email</span>
 								{{ Form::text('company_email', Input::old('company_email'), array('class'=>'')) }}
+								<label class = "error_message hide">{{ $errors->first('company_email') }}</label>
 							</div>
 							<div class="formfield">
 								<span>Website</span>
@@ -138,40 +170,5 @@ active
 
 @endsection
 @section('script')
-	<script type="text/javascript">
-<!--
-$(document).ready(function() {
-	    var options = { 
-                beforeSubmit:  showRequest,
-        success:       showResponse,
-        dataType: 'json' 
-        }; 
-     $('body').delegate('#file_browse','change', function(){
-         $('#upload').ajaxForm(options).submit();          
-     }); 
-});        
-function showRequest(formData, jqForm, options) { 
-    $("#validation-errors").hide().empty();
-    $("#output").css('display','none');
-    return true; 
-} 
-function showResponse(response, statusText, xhr, $form)  { 
-    if(response.success == false)
-    {
-        var arr = response.errors;
-        $.each(arr, function(index, value)
-        {
-            if (value.length != 0)
-            {
-                $("#validation-errors").append('<div class="alert alert-error"><strong>'+ value +'</strong><div>');
-            }
-        });
-        $("#validation-errors").show();
-    } else {
-         $("#output").html("<img src='"+response.file+"' />");
-         $("#output").css('display','block');
-    }
-}
-//-->
-</script>
+	<script type="text/javascript"></script>
 @endsection

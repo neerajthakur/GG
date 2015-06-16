@@ -41,10 +41,10 @@ Route::group(array('before'=>'auth_admin'), function(){
 	//Route::get('/admin/members/add', 'UserController@addMember');
 	//Route::post('/admin/members/add', 'UserController@addMemberPost');
 
-	Route::get('/admin/members/add', 'UserController@addCompanyInfo');
+	Route::get('/admin/members/add/{hash?}', 'UserController@addCompanyInfo');
 	Route::post('/admin/members/add', 'UserController@addCompanyInfoPost');
 
-	Route::get('/admin/members/addProperty', 'UserController@addPropertyInfo');
+	Route::get('/admin/members/addProperty/{hash?}', 'UserController@addPropertyInfo');
 	Route::post('/admin/members/addProperty', 'UserController@addPropertyInfoPost');
 
 	Route::get('/admin/members/addUser', 'UserController@addCompanyUser');

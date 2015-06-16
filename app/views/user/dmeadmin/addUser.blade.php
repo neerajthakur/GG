@@ -7,18 +7,7 @@ active
 			
             <div id="page-inner">
               <div class="toptabingpanel">
-				<?php $messages = $errors->all('<p>:message</p>') ?>
-			<?php 
 				
-				if(count($messages) > 0){
-					echo "<div class = 'error-message-box'>";
-						foreach($messages as $msg){
-							echo $msg;
-						}
-					echo "</div>";	
-				}
-				
-			?>
 			<?php if(Session::has('account_success')): ?>
 			<div class="alert alert-success">
 					<p>{{ Session::get('account_success') }}</p>
@@ -49,22 +38,26 @@ active
 					<div class="formfield">
 						<span>Name*</span>
 						{{ Form::text('name', Input::old('name'), array('class'=>'form-control')) }}
+						<label class = "error_message hide">{{ $errors->first('name') }}</label>
 					</div>
 					<div class="formfield">
 						<span>Email*</span>
 						{{ Form::text('email', Input::old('email'), array('class'=>'form-control')) }}
+						<label class = "error_message hide">{{ $errors->first('email') }}</label>
 					</div>
 					<div class="formfield">
 						<span>Phone</span>
-						{{ Form::text('phone', Input::old('phone'), array('class'=>'form-control')) }}
+						{{ Form::text('phone', '', array('autcomplete'=>'off','class'=>'form-control')) }}
 					</div>
 					<div class="formfield">
 						<span>Password*</span>
 						{{ Form::password('password') }}
+						<label class = "error_message hide">{{ $errors->first('password') }}</label>
 					</div>
 					<div class="formfield">
 						<span>Confirm Password*</span>
 						{{ Form::password('password_confirmation') }}
+						<label class = "error_message hide">{{ $errors->first('password_confirmation') }}</label>
 					</div>
 
 					<div class="adminusermain">
@@ -99,40 +92,5 @@ active
 
 @endsection
 @section('script')
-	<script type="text/javascript">
-<!--
-$(document).ready(function() {
-	    var options = { 
-                beforeSubmit:  showRequest,
-        success:       showResponse,
-        dataType: 'json' 
-        }; 
-     $('body').delegate('#file_browse','change', function(){
-         $('#upload').ajaxForm(options).submit();          
-     }); 
-});        
-function showRequest(formData, jqForm, options) { 
-    $("#validation-errors").hide().empty();
-    $("#output").css('display','none');
-    return true; 
-} 
-function showResponse(response, statusText, xhr, $form)  { 
-    if(response.success == false)
-    {
-        var arr = response.errors;
-        $.each(arr, function(index, value)
-        {
-            if (value.length != 0)
-            {
-                $("#validation-errors").append('<div class="alert alert-error"><strong>'+ value +'</strong><div>');
-            }
-        });
-        $("#validation-errors").show();
-    } else {
-         $("#output").html("<img src='"+response.file+"' />");
-         $("#output").css('display','block');
-    }
-}
-//-->
-</script>
+	<script type="text/javascript"></script>
 @endsection

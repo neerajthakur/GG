@@ -10,17 +10,19 @@ class UserController extends BaseController {
 		$rules = array(
 		  'name' => 'required',
 		  'email' => 'required|email|unique:users',
-		  'password' => 'required|min:8|max:20|confirmed'
+		  'password' => 'required|min:8|max:20|confirmed',
+		  'password_confirmation' => 'required'
 		  
 		);
 		$messages = array(
-			'name.required' => 'The name field is required.',
-			'email.required' => 'The email field is required.',
-			'email.email' => 'Email must be of valid email format.',
+			'name.required' => 'Field is required.',
+			'email.required' => 'Field is required.',
+			'email.email' => 'Not a valid email format.',
 			'email.unique' => 'Email is already in use.',
-			'password.required' => 'Password field is required.',
-			'password.min' => 'Password must be atleast 8 characters long.',
-			'password.max' => 'Password must not be longer than 20 characters.',
+			'password.required' => 'Field is required.',
+			'password.min' => 'Atleast 8-20 characters long.',
+			'password.max' => 'Atleast 8-20 characters long.',
+			'password_confirmation.required' => "Field is required.",
 			'password_confirmation.confirmed' => 'Passwords do not match.'
 		);    
 		$validation = Validator::make(Input::all(), $rules, $messages);
@@ -38,11 +40,14 @@ class UserController extends BaseController {
 
 	//Add users for company
 	public function addCompanyUser(){
-		$member_id = Session::get("userCompanyId");
+		$property_id = Session::get("PropertyId");
+		
+		$property_data = Property::propertyDetail($property_id, 'id');
+		$member_id = $property_data->member_id;
 		if(!$member_id){
 			return Redirect::to("/admin/members/add")->with("Please create a member first.");
 		}
-		return View::make("user.dmeadmin.addCompanyUser", array('member_id' => $member_id));
+		return View::make("user.dmeadmin.addCompanyUser", array('member_id' => $member_id, 'property_id' => $property_id));
 	}
 
 	public function addCompanyUserPost(){
@@ -70,14 +75,20 @@ class UserController extends BaseController {
 		$lastInsertId = User::addUser(Input::all(), $user_type = 'member');
 		Session::forget('userUploadedImage');
 		Session::forget('userUploadedImageThumb');
-		Session::forget("userCompanyId");
+		Session::forget("PropertyId");
 		return Redirect::to("/admin/members/list")->with('account_success','User has been successfully added.');
 	}
 
-	public function addCompanyInfo(){
+	public function addCompanyInfo($id = null){
 		//$lastInsertMemberId = Session::get("lastInsertMemberId"); 
 		$countries = Country::getCountries();
-		return View::make("user.dmeadmin.addCompanyInfo", array("countries"=>$countries));
+		$record = "";
+		$action_type = "";
+		if($id){
+			$record = Member::memberDetail($id, 'id');
+			$action_type = "edit";
+		}
+		return View::make("user.dmeadmin.addCompanyInfo", array("countries"=>$countries, 'record' => $record, 'action_type' => $action_type));
 	}
 
 	public function addCompanyInfoPost(){
@@ -111,7 +122,14 @@ class UserController extends BaseController {
 		}
 		//if validation passes, create company/member
 
-		$lastInsertId = Member::addCompany(Input::all());
+		if(Input::has('company_id')){
+			Member::editCompany(Input::all());
+			$lastInsertId = Input::get('company_id');
+		}else{
+			$lastInsertId = Member::addCompany(Input::all());
+		}
+		
+
 		Session::forget('userUploadedCompanyImageThumb');
 		Session::forget('userUploadedCompanyImage');
 		if(Input::has('save_and_continue')) {
@@ -122,19 +140,28 @@ class UserController extends BaseController {
 		}
 	}
 
-	public function addPropertyInfo(){
-		$member_id = Session::get("lastInsertedCompanyId");
-		if(!$member_id){
-			return Redirect::to("/admin/members/add")->with("Please create a member first.");
+	public function addPropertyInfo($property_id = null){
+		$record = "";
+		$action_type = "";
+		if($property_id){
+			$property_data = Property::propertyDetail($property_id, 'id');
+			$member_id = $property_data->member_id;
+			$record = $property_data;
+			$action_type = "edit";
+		}else{
+			$member_id = Session::get("lastInsertedCompanyId");
+			if(!$member_id){
+				return Redirect::to("/admin/members/add")->with("Please create a member first.");
+			}
 		}
 		$countries = Country::getCountries();
 		$propertyTypes = PropertyType::getPropertyTypes();
 		$propertySizes = PropertySize::getPropertySizes();
 		$certificationStandards = CertificationStandard::getCertificationStandards();
-		$member_id = Session::get("lastInsertedCompanyId");
+		//$member_id = Session::get("lastInsertedCompanyId");
 		
 		//Session::forget("lastInsertedCompanyId");
-		return View::make("user.dmeadmin.addPropertyInfo", array("countries"=>$countries, "propertyTypes" => $propertyTypes, "propertySizes" => $propertySizes, "certificationStandards" => $certificationStandards, "member_id" => $member_id));
+		return View::make("user.dmeadmin.addPropertyInfo", array("countries"=>$countries, "propertyTypes" => $propertyTypes, "propertySizes" => $propertySizes, "certificationStandards" => $certificationStandards, "member_id" => $member_id, "record" => $record, 'action_type' => $action_type));
 	}
 
 	public function addPropertyInfoPost(){
@@ -172,13 +199,19 @@ class UserController extends BaseController {
 			return Redirect::back()->withInput()->withErrors($validation);
 		}
 		//if validation passes, create company/member
-
-		$lastInsertId = Property::addProperty(Input::all());
+		
+		if(Input::has('property_id')){
+			Property::editProperty(Input::all());
+			$lastInsertId = Input::get('property_id');
+		}else{
+			$lastInsertId = Property::addProperty(Input::all());
+		}
+		
 		Session::forget('userUploadedPropertyImageThumb');
 		Session::forget('userUploadedPropertyImage');
 		Session::forget("lastInsertedCompanyId");
 		if(Input::has('save_and_continue')) {
-			Session::put("userCompanyId", $lastInsertId);
+			Session::put("PropertyId", $lastInsertId);
 			return Redirect::to('/admin/members/addUser')->with('account_success','Property information has been added successfully.');
 		}else{
 			return Redirect::back()->with('account_success','Property information has been added successfully.');

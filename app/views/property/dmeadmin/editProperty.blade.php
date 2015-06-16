@@ -7,7 +7,7 @@ active
 			
             <div id="page-inner">
               <div class="toptabingpanel">
-			  <?php $messages = $errors->all('<p>:message</p>') ?>
+			  
 			
 			<?php if(Session::has('account_success')): ?>
 			<div class="alert alert-success">
@@ -41,7 +41,7 @@ active
 				<div class="titlefield">
 					<span>Property Name*</span>
 					{{ Form::text('property_name', Input::old('property_name'), array('class'=>'')) }}
-					<label class = "error_message">{{ $errors->first('property_name') }}</label>
+					<label class = "error_message hide">{{ $errors->first('property_name') }}</label>
 					{{ Form::hidden('form_type', "property") }}
 					{{ Form::hidden('property_hash', $record->hash) }}
 					{{ Form::hidden('property_id', $record->id) }}
@@ -55,7 +55,7 @@ active
 					<div class="formfield">
 						<span>Address*</span>
 						{{ Form::text('property_address', Input::old('property_address'), array('class'=>'')) }}
-						<label class = "error_message">{{ $errors->first('property_address') }}</label>
+						<label class = "error_message hide">{{ $errors->first('property_address') }}</label>
 
 					</div>
 					<div class="formfield">
@@ -66,32 +66,34 @@ active
 								<div class="formfield">
 									<span>City*</span>
 									{{ Form::text('property_city', Input::old('property_city'), array('class'=>'')) }}
-									<label class = "error_message">{{ $errors->first('property_city') }}</label>
+									<label class = "error_message hide">{{ $errors->first('property_city') }}</label>
 								</div>
 								<div class="formfield">
 									<span>State*</span>
 									{{ Form::text('property_state', Input::old('property_state'), array('class'=>'')) }}
-									<label class = "error_message">{{ $errors->first('property_state') }}</label>
+									<label class = "error_message hide">{{ $errors->first('property_state') }}</label>
 								</div>
 							</div>
 							<div class="formfieldDevide">
 								<div class="formfield">
 									<span>Country*</span>
+									<div class = "select_div">
 									{{ Form::select('property_country_id', $countries, null, array('class'=>'business-Type', 'style'=>'border: 1px solid #ff0000')) }}
-									<label class = "error_message">{{ $errors->first('property_country_id') }}</label>
+									</div>
+									<label class = "error_message hide">{{ $errors->first('property_country_id') }}</label>
 									
 								</div>
 								<div class="formfield">
 									<span>Zip-Code*</span>
 									{{ Form::text('property_zipcode', Input::old('property_zipcode'), array('class'=>'')) }}
-									<label class = "error_message">{{ $errors->first('property_zipcode') }}</label>
+									<label class = "error_message hide">{{ $errors->first('property_zipcode') }}</label>
 								</div>
 							</div>
 							<div class="formfieldDevide">
 								<div class="formfield">
 									<span>Phone*</span>
 									{{ Form::text('property_phone', Input::old('property_phone'), array('class'=>'')) }}
-									<label class = "error_message">{{ $errors->first('property_phone') }}</label>
+									<label class = "error_message hide">{{ $errors->first('property_phone') }}</label>
 								</div>
 								<div class="formfield">
 									<span>Fax</span>
@@ -101,7 +103,7 @@ active
 							<div class="formfield">
 								<span>Email</span>
 								{{ Form::text('property_email', Input::old('property_email'), array('class'=>'')) }}
-								<label class = "error_message">{{ $errors->first('property_email') }}</label>
+								<label class = "error_message hide">{{ $errors->first('property_email') }}</label>
 							</div>
 							<div class="formfield">
 								<span>Website</span>
@@ -124,9 +126,11 @@ active
 									{{ Form::text('property_membership_code', Input::old('property_membership_code'), array('class'=>'')) }}
 								</div>
 								<div class="formfield">
-									<span>Certification Standard</span>
+									<span>Certification Standard*</span>
+									<div class = "select_div">
 									{{ Form::select('property_certification_standard_id', $certificationStandards, null, array('class'=>'business-Type')) }}
-									<label class = "error_message">{{ $errors->first('property_certification_standard_id') }}</label>
+									</div>
+									<label class = "error_message hide">{{ $errors->first('property_certification_standard_id') }}</label>
 								</div>
 								<div class="formfield authorized">
 									{{ Form::checkbox('property_preauthorize_audit', '1', (Input::old('property_preauthorize_audit') == '1') ? false : true) }}<label>Pre-Authorize First Audit</label>
@@ -134,17 +138,21 @@ active
 							</div>
 							<div class="formfieldDevide">
 								<div class="formfield">
-									<span>Property Type</span>
+									<span>Property Type*</span>
+									<div class = "select_div">
 									{{ Form::select('property_type_id', $propertyTypes, null, array('class'=>'business-Type')) }}
-									<label class = "error_message">{{ $errors->first('property_type_id') }}</label>
+									</div>
+									<label class = "error_message hide">{{ $errors->first('property_type_id') }}</label>
 								</div>
 								
 							</div>
 							<div class="formfieldDevide">
 								<div class="formfield">
-									<span>Property Size</span>
+									<span>Property Size*</span>
+									<div class = "select_div">
 									{{ Form::select('property_size_id', $propertySizes, null, array('class'=>'business-Type')) }}
-									<label class = "error_message">{{ $errors->first('property_size_id') }}</label>
+									</div>
+									<label class = "error_message hide">{{ $errors->first('property_size_id') }}</label>
 								</div>
 							</div>
 						</div>
@@ -170,46 +178,7 @@ active
 @section('script')
 	<script type="text/javascript">
 <!--
-$(document).ready(function() {
-	    var options = { 
-        beforeSubmit:  showRequest,
-        success:       showResponse,
-        dataType: 'json' 
-        }; 
-     $('body').delegate('#file_browse','change', function(){
-         $('#upload').ajaxForm(options).submit();          
-     });
-	 
-	 $("label.error_message").each(function(){
-		 if($(this).html() != ""){
-			$(this).prev("input[type=text]").css('border','2px solid #ff0000');
-			//alert($(this).html().length);
-		 }
-		
-	 });
-});        
-function showRequest(formData, jqForm, options) { 
-    $("#validation-errors").hide().empty();
-    $("#output").css('display','none');
-    return true; 
-} 
-function showResponse(response, statusText, xhr, $form)  { 
-    if(response.success == false)
-    {
-        var arr = response.errors;
-        $.each(arr, function(index, value)
-        {
-            if (value.length != 0)
-            {
-                $("#validation-errors").append('<div class="alert alert-error"><strong>'+ value +'</strong><div>');
-            }
-        });
-        $("#validation-errors").show();
-    } else {
-         $("#output").html("<img src='"+response.file+"' />");
-         $("#output").css('display','block');
-    }
-}
+
 //-->
 </script>
 <script>

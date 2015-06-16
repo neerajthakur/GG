@@ -30,15 +30,15 @@ class MemberController extends BaseController {
 		  
 		);
 		$messages = array(
-			'company_name.required' => 'The company name field is required.',
-			'company_code.required' => 'The company code field is required.',
-			'company_address.required' => 'The address field is required.',
-			'company_city.required' => 'The city field is required.',
-			'company_state.required' => 'The state field is required.',
-			'company_country_id.required' => 'The country field is required.',
-			'company_zipcode.required' => 'The zipcode field is required.',
-			'company_phone.required' => 'The phone field is required.',
-			'company_email.email' => 'Email must be of valid email format.'
+			'company_name.required' => 'Field is required.',
+			'company_code.required' => 'Field is required.',
+			'company_address.required' => 'Field is required.',
+			'company_city.required' => 'Field is required.',
+			'company_state.required' => 'Field is required.',
+			'company_country_id.required' => ' ',
+			'company_zipcode.required' => 'Field is required.',
+			'company_phone.required' => 'Field is required.',
+			'company_email.email' => 'Not a valid email format.'
 		);    
 		$validation = Validator::make(Input::all(), $rules, $messages);
 		if($validation->fails()){

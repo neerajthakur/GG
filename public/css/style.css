@@ -297,9 +297,18 @@ transform:  translate3d(0px, 0px, 0px);-webkit-transition: transform 0.5s cubic-
 .forminner{float:left; width:100%;background:#fff;padding:4px 50px 40px 20px;margin:18px 0 0 0;max-width:671px;}
 .formfield{ float: left;margin: 0 0 0 0px;width: 100%;margin:16px 0 0 0; position: relative;}
 
-label.error_message{position: absolute; left:0; top: 29px; padding: 5px 10px; font-size: 12px; color: #ff0000}
+label.error_message{background: #ff0000 none repeat scroll 0 0;
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 12px !important;
+    opacity: 1 !important;
+    padding: 5px 10px;
+    position: absolute;
+    right: -10px;
+    top: 13px;}
+label.hide{ display:none};
 .formfield span{float:left;opacity: .7;color: #393f47;font-family: "Open Sans", sans-serif;font-size: 14px;width:100%;}
-.formfield input[type="text"]{float:left;width: 100%;background-color: #edf1f2;color: #00b7a9;font-family: "Open Sans", sans-serif;font-size: 18px;border:none;margin:6px 0 0 0;padding:9px 8px;height:auto;border-radius:0;box-shadow:none;}
+.formfield input[type="text"]{float:left;width: 100%;background-color: #edf1f2;color: #00b7a9;font-family: "Open Sans", sans-serif;font-size: 18px;border:none;margin:0px 0 0 0;padding:9px 8px;height:auto;border-radius:0;box-shadow:none;}
 .formfield input[type="password"]{float:left;width: 100%;background-color: #edf1f2;color: #393f47;font-family: "Open Sans", sans-serif;font-size: 14px;border:none;margin:6px 0 0 0;padding:12px 8px;}
 .adminusermain{float:left; margin:30px 0 0 0;}
 .adminusermain.notification{margin:30px 0 0 30px;}
@@ -345,8 +354,8 @@ input.cmn-toggle-round:checked + label:after {margin-left: 60px;}
 .switch-input:checked ~ .switch-handle {left: 50px;}
 .switch-green > .switch-input:checked ~ .switch-label {background: #00b7a9;}
 
-
-.business-Type{width:100%;float:left;margin:6px 0 0;}
+.select_div{width: 100%; float:left;}
+.business-Type{width:100%;float:left;margin:0 0 0;}
 .business-Type button.btn{width:100%;float:left;min-height:43px;}
 span.caret{width:auto;}
 span.filter-option {float: left;width: 80%;text-align:left;font-weight:bold; font-size: 18px;color: #00b7a9}
@@ -374,6 +383,7 @@ span.filter-option {float: left;width: 80%;text-align:left;font-weight:bold; fon
 .poroperty-right .forminner {max-width:332px;}
 .poroperty-right {float: left;margin: 0 0 0 15px;max-width: 332px;width: 100%;}
 .formfield label {float: left;font-size: 14px;font-weight: 400;margin: 4px 0 0 10px;opacity: 0.7;width: auto;}
+.formfield span{width: 100%; float:left; margin-bottom: 6px;}
 .styledCheckbox {float: left;}
 .formfield.authorized {margin: 40px 0 20px;}
 .next-tab {border: 1px dashed #b0b1b1;border-radius: 2px;color: #b0b1b1;float: left;font-size: 14px;font-weight: 800;padding: 18px 30px;width: auto;}
