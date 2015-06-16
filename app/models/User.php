@@ -44,8 +44,8 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	);
 	public static $password_rules = array(
 		'old-password' 		=> 	'required',
-	    	'new-password-1' 	=> 	'required|different:old-password|min:6',
-	    	'new-password-2'	=>	'required|same:new-password-1',
+		'new-password-1' 	=> 	'required|different:old-password|min:6',
+		'new-password-2'	=>	'required|same:new-password-1',
 	);
 	public static	$messages = array(
 			'first_name.required' => 'First name is required.',
@@ -141,47 +141,58 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 			$file->move($path, $filename);
 		}
 	}
-	public static function createUser($input, $account_id = null){
+	public static function addUser($input, $user_type = null){
 		$user = new User();
-		$user->first_name = $input['first_name'];
-		$user->last_name = $input['last_name'];
+		$user->title = $input['title'];
+		$user->name = $input['name'];
 		$user->email = $input['email'];
-		$password = uniqid();
-		$user->password = Hash::make($password);
+		$user->phone = $input['phone'];
+		if($user_type){
+			$user->member_id = $input['member_id'];
+		}
+		
+		//$password = uniqid();
+		$user->password = Hash::make($input['password']);
 		$user->hash	 = md5(uniqid());
 
-		$imageFile = Input::file('image');
-		$destinationPath = 'uploads/profile_images/';
-		$filename = "";
-		if($imageFile != ""){
-			$filename			= time().$imageFile->getClientOriginalName();
-			$mime_type			= $imageFile->getMimeType();
-			$extension				= $imageFile->getClientOriginalExtension();
-			$upload_success		= $imageFile->move($destinationPath, $filename);
-		}
-		$query = DB::table('usertype')->select('id')->where('usertype', $input['usertype'])->first();
-		if($query){
-			$usertype_id = $query->id;
+		
+		if(isset($input['usertype'])){
+			$query = DB::table('usertypes')->select('id')->where('usertype', $input['usertype'])->first();
+			if($query){
+				$usertype_id = $query->id;
+			}
 		}else{
-			$usertype_id = 2;
+			if($input['form_type'] == "user"){
+				$usertype_id = '4';
+			}else if($input['form_type'] == "company_user"){
+				$usertype_id = '5';
+			}
+
 		}
-		$user->image = $filename;
+		if(Session::has('userUploadedImage')){
+			$user->image = Session::get('userUploadedImage');
+		}else{
+			$user->image = "";
+		}
+		
 		$user->usertype_id = $usertype_id;
 		$user->save();
+		$lastInsertId = $user->id;
 		$user = array(
 			'email'=>$input['email'],
-			'first_name'=>$input['first_name'],
-			'name'=>$input['first_name']." ".$input['last_name'],
-			'password' => $password
+			'first_name'=>$input['name'],
+			'name'=>$input['name'],
+			'password' => $input['password']
 		);
 
 		
 
 		// use Mail::send function to send email passing the data and using the $user variable in the closure
 		Mail::send('emails.signup', $user, function($message) use ($user){
-		  $message->from('admin@site.com', 'Site Admin');
-		  $message->to($user['email'], $user['name'])->subject('Welcome to Hydra!');
+		  $message->from('no-reply@greenglobe.com', 'Site Admin');
+		  $message->to($user['email'], $user['name'])->subject('Welcome to Green Globe Solutions!');
 		});
+		return $lastInsertId;
 	}
 
 	public static function getAll($orderBy, $order){
@@ -337,5 +348,18 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		$user->last_name = $input['last_name'];
 		$user->email = $input['email'];
 		$user->save();
+	}
+
+	public static function getMemberUsers($company_id, $count = false){
+		$users = DB::table("users")->select("users.*")->where("member_id",$company_id)->get();
+		if($count){
+			return count($users);
+		}
+		return $users;
+	}
+
+	public static function getManagerUser($company_id){
+		$user = DB::table("users")->select("users.*")->where("member_id", $company_id)->where("usertype_id", '2')->first(); //company_user_manager
+		return $user;
 	}
 }

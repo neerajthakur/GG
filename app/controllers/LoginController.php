@@ -63,6 +63,7 @@ class LoginController extends BaseController {
 			$redirect = "/admin";
 			
 		}
+		Session::forget('account_role');
 		Auth::logout();
 		return Redirect::to($redirect);
 	}

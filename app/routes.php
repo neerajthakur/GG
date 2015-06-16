@@ -35,4 +35,38 @@ Route::post('/admin', array('before'=>'csrf', 'uses'=>'LoginController@adminLogi
 //Admin Urls
 Route::group(array('before'=>'auth_admin'), function(){
 	Route::get('/admin/dashboard', 'DashboardController@adminDashboard');
+	Route::get('/admin/users/add', 'UserController@addUser');
+	Route::post('/admin/users/add', 'UserController@addUserPost');
+
+	//Route::get('/admin/members/add', 'UserController@addMember');
+	//Route::post('/admin/members/add', 'UserController@addMemberPost');
+
+	Route::get('/admin/members/add', 'UserController@addCompanyInfo');
+	Route::post('/admin/members/add', 'UserController@addCompanyInfoPost');
+
+	Route::get('/admin/members/addProperty', 'UserController@addPropertyInfo');
+	Route::post('/admin/members/addProperty', 'UserController@addPropertyInfoPost');
+
+	Route::get('/admin/members/addUser', 'UserController@addCompanyUser');
+	Route::post('/admin/members/addUser', 'UserController@addCompanyUserPost');
+
+	Route::get('/admin/members/list', 'MemberController@membersList');
+	//Route::post('/admin/members/list',);
+
+	Route::get('/admin/members/detail/{hash}', 'MemberController@memberDetail');
+	Route::get('/admin/members/properties/{hash}', 'PropertyController@propertiseList');
+
+	Route::get('/admin/members/edit/{hash}', 'MemberController@memberEdit');
+	Route::post('/admin/members/edit/{hash}', 'MemberController@memberEditPost');
+
+	Route::get('/admin/members/property/edit/{hash}', 'PropertyController@propertyEdit');
+	Route::post('/admin/members/property/edit/{hash}', 'PropertyController@propertyEditPost');
+
+});
+
+//Services (requires user authorization)
+Route::group(array('before'=>'auth'), function(){
+	Route::get('/upload', 'FileController@getUploadForm');
+	Route::post('/upload/image','FileController@uploadImage');
+	Route::post('/upload/image/edit/{hash}','FileController@uploadImageEdit');
 });

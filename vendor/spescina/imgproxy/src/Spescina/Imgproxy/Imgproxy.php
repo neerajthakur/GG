@@ -13,6 +13,7 @@ class Imgproxy {
 
         public function link($path, $width, $height, $quality = null, $zoomCrop = null)
         {
+			
                 $q = is_null($quality) ? self::Q : $quality;
                 
                 $zc = is_null($zoomCrop) ? self::ZC : $zoomCrop;

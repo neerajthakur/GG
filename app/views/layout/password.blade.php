@@ -18,7 +18,7 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body onload="loaded(document.body)" >
+<body onload="loaded(document.body)" class="login_body">
 <div id="wrapper">
 		<div id="login-container">
 		<div id="login">
